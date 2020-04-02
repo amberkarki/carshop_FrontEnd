@@ -46,14 +46,25 @@ export default function Carlist() {
     setOpen(false);
   }
  
+  const saveCar = (car)=>{
+    fetch ('https://carstockrest.herokuapp.com/cars', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      
+      },
+      body: JSON.stringify(car)
+    })
+    .then(res=>getCars())
+    .catch(err => console.error(err))
+
+  };
 
 
 
 
   const columns = [
-    {
-      Cell: row => (<Button size="small" className ={classes.button} startIcon={<SaveIcon />} color="primary" variant="contained" >Edit</Button>)
-    },
+   
 
     {
       Header: 'Brand',
@@ -80,14 +91,20 @@ export default function Carlist() {
       accessor: 'price'
     },
     {
-      Cell: row => (<Button size="small" className ={classes.button} startIcon={<DeleteIcon />} color="secondary" variant="contained" onClick={() => deleteCar(row.original._links.self.href)}>Delete</Button>)
+      Cell: row => (<Button size="small" className ={classes.button} startIcon={<DeleteIcon />} color="secondary" variant="contained" onClick={() => deleteCar(row.original._links.self.href)}>Delete</Button>),
+      filterable:false,
+      sortable:false,
     },
-    
+    {
+      Cell: row => (<Button size="small" className ={classes.button} startIcon={<SaveIcon />} color="primary" variant="contained" >Edit</Button>),
+      filterable:false,
+      sortable:false,
+    },
   ]
  
   return(
     <div>
-      <Addcar />
+      <Addcar  saveCar={saveCar}/>
       <br/>
       <ReactTable defaultPageSize={10} filterable={true} data={cars} columns={columns} />
       <Snackbar 
