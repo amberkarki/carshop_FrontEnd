@@ -6,10 +6,11 @@ import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Icon from '@material-ui/core/Icon';
 import Snackbar from '@material-ui/core/Snackbar';
-import SaveIcon from '@material-ui/icons/Save';
+
 
 
 import Addcar from './Addcar';
+import Editcar from'./Editcar';
  
 export default function Carlist() {
   const [cars, setCars] = useState([]);
@@ -60,6 +61,21 @@ export default function Carlist() {
 
   };
 
+  const updateCar =(car, link) => {
+    fetch(link, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      
+      },
+      body: JSON.stringify(car)
+    })
+    .then(res=>getCars())
+    .catch(err => console.error(err))
+   
+
+  };
+
 
 
 
@@ -91,15 +107,22 @@ export default function Carlist() {
       accessor: 'price'
     },
     {
-      Cell: row => (<Button size="small" className ={classes.button} startIcon={<DeleteIcon />} color="secondary" variant="contained" onClick={() => deleteCar(row.original._links.self.href)}>Delete</Button>),
       filterable:false,
       sortable:false,
-    },
+      width:115,
+      
+      Cell: row => <Editcar updateCar={updateCar} car = {row.original} useStyles={useStyles} />
+        },
     {
-      Cell: row => (<Button size="small" className ={classes.button} startIcon={<SaveIcon />} color="primary" variant="contained" >Edit</Button>),
       filterable:false,
       sortable:false,
+      width:115,
+      accessor: '_links.self.href',
+      Cell:  ({value})=> (<Button size="small" className ={classes.button} startIcon={<DeleteIcon />} 
+      color="secondary" variant="contained" onClick={() => deleteCar(value)}>Delete</Button>),
+      
     },
+ 
   ]
  
   return(
@@ -111,7 +134,7 @@ export default function Carlist() {
         open={open}
         autoHideDuration={3000}
         onClose={handleClose}
-        message='Car deleted'
+        message='Your Car is Deleted !!!'
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'left'

@@ -5,9 +5,10 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import propTypes from 'react-table-v6/lib/propTypes';
- 
-export default function Addcar(props) {
+import SaveIcon from '@material-ui/icons/Save';
+
+
+export default function Editcar(props) {
   const [open, setOpen] = React.useState(false);
   const[car,setCar]=React.useState({
     brand:'',
@@ -15,10 +16,20 @@ export default function Addcar(props) {
     color:'',
     fuel:'',
     year:'',
-    price:''
+    price:'',
   });
  
   const handleClickOpen = () => {
+    console.log(props.car);
+    setCar({
+      brand: props.car.brand,
+      model: props.car.model,
+      color: props.car.color,
+      fuel: props.car.fuel,
+      year: props.car.year,
+      price: props.car.price,
+
+    });
     setOpen(true);
   };
  
@@ -31,18 +42,19 @@ export default function Addcar(props) {
     })
   };
 
-  const addcar =()=> {
-    props.saveCar(car);
+  const updateCar =()=> {
+    props.updateCar(car, props.car._links.car.href);
     handleClose();
   }
   
   return(
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Add Car
+      <Button size="small" className ={props.useStyles.button} startIcon={<SaveIcon />} onClick={handleClickOpen}
+       color="primary" variant="contained">
+      Edit Car
       </Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">New Car</DialogTitle>
+        <DialogTitle id="form-dialog-title">Edit Car</DialogTitle>
         <DialogContent>              
           <TextField
             autoFocus
@@ -94,7 +106,7 @@ export default function Addcar(props) {
             autoFocus
             margin="dense"
             name="price"
-            value={car.price}
+            value={car.pr}
             onChange={e=> handelInputChange(e)}
             label="Price"
             fullWidth
@@ -111,7 +123,7 @@ export default function Addcar(props) {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={addcar} color="primary">
+          <Button onClick={updateCar} color="primary">
             Save
           </Button>
         </DialogActions>
