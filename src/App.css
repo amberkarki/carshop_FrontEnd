@@ -14,9 +14,9 @@
 }
 
 .App-header {
-  background-image:url("./assests/car.jpg");
+  background-image:url("./assests/car.png");
   min-height: 8vh;
- display: -webkit-flex;
+ display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
