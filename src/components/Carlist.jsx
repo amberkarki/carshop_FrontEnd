@@ -4,17 +4,17 @@ import { makeStyles } from '@material-ui/core/styles';
 import 'react-table-v6/react-table.css'
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
-import Icon from '@material-ui/core/Icon';
 import Snackbar from '@material-ui/core/Snackbar';
+import Icon from '@material-ui/core';
 
 
 
 import Addcar from './Addcar';
 import Editcar from'./Editcar';
- 
-export default function Carlist() {
+ export default function Carlist() {
   const [cars, setCars] = useState([]);
   const [open, setOpen] = useState(false);
+  const [msg, setMsg] =useState('');
  
   useEffect(() => {
     getCars();
@@ -31,7 +31,9 @@ export default function Carlist() {
     if (window.confirm('Are you sure?')) {
       fetch(link, {method: 'DELETE'})
       .then(_ => getCars())
-      .then(_ => setOpen(true))
+      .then(_ => {
+        setMsg('Car Deleted')
+        setOpen(true)})
       .catch(err => console.error(err))
     }
   }
@@ -43,9 +45,7 @@ export default function Carlist() {
   }));
   const classes = useStyles();
  
-  const handleClose = () => {
-    setOpen(false);
-  }
+
  
   const saveCar = (car)=>{
     fetch ('https://carstockrest.herokuapp.com/cars', {
@@ -56,12 +56,16 @@ export default function Carlist() {
       },
       body: JSON.stringify(car)
     })
-    .then(res=>getCars())
+    .then(_ =>getCars())
+    .then(_ =>{setMsg("car added");
+    setOpen(true);
+  })
     .catch(err => console.error(err))
 
   };
 
-  const updateCar =(car, link) => {
+  const updateCar =(link, car) => {
+    console.log(link)
     fetch(link, {
       method: 'PUT',
       headers: {
@@ -70,14 +74,19 @@ export default function Carlist() {
       },
       body: JSON.stringify(car)
     })
-    .then(res=>getCars())
+    .then(_ => getCars())
+    .then(_ => {
+      setMsg('Car update')
+      setOpen(true)
+    })
     .catch(err => console.error(err))
    
 
   };
 
-
-
+  const handleClose = () => {
+    setOpen(false);
+  }
 
   const columns = [
    
@@ -118,8 +127,8 @@ export default function Carlist() {
       sortable:false,
       width:115,
       accessor: '_links.self.href',
-      Cell:  ({value})=> (<Button size="small" className ={classes.button} startIcon={<DeleteIcon />} 
-      color="secondary" variant="contained" onClick={() => deleteCar(value)}>Delete</Button>),
+      Cell: row => (<Button size="small" className ={classes.button} startIcon={<DeleteIcon />} 
+      color="secondary" variant="contained" onClick={() => deleteCar(row.original._links.self.href)}>Delete</Button>),
       
     },
  
@@ -134,7 +143,7 @@ export default function Carlist() {
         open={open}
         autoHideDuration={3000}
         onClose={handleClose}
-        message='Your Car is Deleted !!!'
+        message={msg}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'left'

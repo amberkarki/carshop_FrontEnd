@@ -14,17 +14,18 @@
 }
 
 .App-header {
-  background-image:url("./assests/car.png");
+  background-image:url("./assests/car.png")  ;
   min-height: 8vh;
  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(65px + 2vmin);
+  background-size: auto;
  
   
 
-    color: white;
+    color:darkblue;
 }
 
 .App-link {

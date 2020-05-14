@@ -9,6 +9,7 @@ import propTypes from 'react-table-v6/lib/propTypes';
  
 export default function Addcar(props) {
   const [open, setOpen] = React.useState(false);
+  
   const[car,setCar]=React.useState({
     brand:'',
     model:'',
@@ -23,89 +24,107 @@ export default function Addcar(props) {
   };
  
   const handleClose = () => {
+    
     setOpen(false);
   };
-
+  
   const handelInputChange = (event) =>{
-    setCar({...car, [event.target.name]: event.target.value
+    
+        setCar({...car, [event.target.name]: event.target.value
     })
   };
 
   const addcar =()=> {
+    if(car.model===' ' || car.brand ==='' || car.color===' ' || car.fuel==='' || car.year ===' ' || car.price ==='')
+    {
+     return (alert(" Comepelt all the requried field to  Add a new car !!"))
+    }
+    else {
     props.saveCar(car);
+    setCar({
+    brand:'',
+    model:'',
+    color:'',
+    fuel:'',
+    year:'',
+    price:''
+
+    })
+
+    
     handleClose();
   }
+  }
+
   
   return(
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Add Car
+      <Button style={{margin: 10}} variant="outlined" color="primary" onClick={handleClickOpen}>
+        Add New Car
       </Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">New Car</DialogTitle>
-        <DialogContent>              
+        <DialogTitle id="form-dialog-title"> New Car</DialogTitle>
+        <DialogContent>
           <TextField
             autoFocus
             margin="dense"
+            id="name"
+            label="Brand"
             name="brand"
             value={car.brand}
-            onChange={e => handelInputChange(e)}
-            label="Brand"
-            type="Text"
+            onChange={(e) => handelInputChange(e)}
             fullWidth
           />
           <TextField
-            autoFocus
-            margin="dense"
-            name="model"
-            value={car.model}
-            onChange={e => handelInputChange(e)}
-            label="Model"
-            fullWidth
+          autoFocus
+          margin="dense"
+          id="name"
+          label="Model"
+          name="model"
+          value={car.model}
+          onChange={(e) => handelInputChange(e)}
+          fullWidth
           />
           <TextField
-            autoFocus
-            margin="dense"
-            name="color"
-            value={car.color}
-            onChange={e=> handelInputChange(e)}
-            label="Color"
-            fullWidth
+          autoFocus
+          margin="dense"
+          id="name"
+          label="Color"
+          name="color"
+          value={car.color}
+          onChange={(e) => handelInputChange(e)}
+          fullWidth
           />
           <TextField
-            autoFocus
-            margin="dense"
-            name="fuel"
-            value={car.fuel}
-            onChange={e=> handelInputChange(e)}
-            label="Fuel"
-            fullWidth
+          autoFocus
+          margin="dense"
+          id="name"
+          label="Fuel"
+          name="fuel"
+          value={car.fuel}
+          onChange={(e) => handelInputChange(e)}
+          fullWidth
           />
           <TextField
-            autoFocus
-            margin="dense"
-            name="year"
-            value={car.year}
-            onChange={e=> handelInputChange(e)}
-            label="Year"
-            fullWidth
+          autoFocus
+          margin="dense"
+          id="name"
+          label="Year"
+          name="year"
+          value={car.year}
+          onChange={(e) => handelInputChange(e)}
+          fullWidth
           />
           <TextField
-            autoFocus
-            margin="dense"
-            name="price"
-            value={car.price}
-            onChange={e=> handelInputChange(e)}
-            label="Price"
-            fullWidth
+          autoFocus
+          margin="dense"
+          id="name"
+          label="Price"
+          name="price"
+          value={car.price}
+          onChange={(e) => handelInputChange(e)}
+          fullWidth
           />
-
-
-
-
-
-
-
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
